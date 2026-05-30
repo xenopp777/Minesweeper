@@ -1,0 +1,30 @@
+{
+  "name": "minesweeper",
+  "version": "1.0.0",
+  "description": "A minesweeper web app made with JavaScript",
+  "homepage": "https://github.com/xenopp777/Minesweeper#readme",
+  "bugs": {
+    "url": "https://github.com/xenopp777/Minesweeper/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xenopp777/Minesweeper.git"
+  },
+  "license": "ISC",
+  "author": "Zoie Danison",
+  "type": "commonjs",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
+    "lit-html": "^3.3.2"
+  },
+  "devDependencies": {
+    "vite": "^8.0.10"
+  }
+}
