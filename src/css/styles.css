@@ -1,12 +1,18 @@
 /* Written by Zoie D, 5/30/26 */
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+* {
+    font-family: "Roboto Mono", monospace;
+}
+
 body {
     background-color: #e8c5d1;
     color: red;
 }
 
 .container {
-    width: 450px;
+    width: 400px;
     margin: auto;
 }
 
@@ -20,11 +26,82 @@ body {
     border-color: #f3fbfc #748585 #637474 #cfe1e2;
 }
 
-.play-grid {
+.scrn {
+    display: flex;
+    background-color: #263946;
+    align-items: center;
+    padding: 2px;
+    width: 60px;
+    height: 40px;
+    font-size: 18px;
+    border: 2px solid;
+    border-color: #748585 #f3fbfc #cfe1e2 #637474;
+}
+
+#reset {
+    background: inherit;
+    display: block;
+    width: 60px;
+    height: 40px;
+    font-size: 16px;
+    border: 4px solid;
+    border-color: #f3fbfc #748585 #637474 #cfe1e2;
+}
+
+#reset::after {
+    content: '0w<';
+}
+
+#reset.lost::after {
+    content: 'T^T';
+}
+
+#reset.won::after {
+    content: '^w^';
+}
+
+.btn {
+    background-color: #dcf2f3;
+    padding: 6px;
+    border: 4px solid;
+    border-color: #f3fbfc #748585 #637474 #cfe1e2;
+}
+
+#play-grid {
     background-color: #dcf4f5;
-    padding: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
     border: 4px solid;
     border-color: #637474 #cfe1e2 #f3fbfc #748585;
+}
+
+#play-grid div {
+    font-size: 24px;
+    text-align: center;
+    width: 32px;
+    height: 32px;
+    border: 4px solid;
+    border-color: #f3fbfc #748585 #637474 #cfe1e2;
+}
+
+#play-grid div:disabled {
+    background-color: #748585;
+    border: 1px solid #637474;
+}
+
+#play-grid div:disabled.exploded {
+    background-color: #dba3b6;
+}
+
+#play-grid div.flagged::after {
+    content: 'F'; /* placeholder flag */
+}
+
+#play-grid div.mine::after {
+    content: '*'; /* placeholder mine */
 }
 
 .difficulty {
@@ -38,24 +115,9 @@ body {
 }
 
 .difficulty .btn {
-    width: 100px;
+    width: 120px;
 }
 
-.score-board .btn {
-    width: 60px;
-}
-
-.btn {
-    background-color: #dcf2f3;
-    padding: 6px;
-    border: 4px solid;
-    border-color: #f3fbfc #748585 #637474 #cfe1e2;
-}
-
-.scrn {
-    background-color: #263946;
-    width: 60px;
-    padding: 8px;
-    border: 2px solid;
-    border-color: #748585 #f3fbfc #cfe1e2 #637474;
+button:active, button#reset:active, #play-grid div:active {
+    border-color: #637474 #cfe1e2 #f3fbfc #748585;
 }
