@@ -1,3 +1,5 @@
+/** Written by Zoie D, 5/30/26 */
+
 import { MSIO } from './IO.js';
 
 export class MSLogic {
@@ -78,5 +80,6 @@ export class MSLogic {
         io.handleGameEvents(io, logic.state);
 
         console.log(logic);
+        return logic;
     }
 }

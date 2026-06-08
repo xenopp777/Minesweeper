@@ -1,11 +1,8 @@
-export async function fetchQuote() {
-    try {
-        const res = await fetch('https://quotesapi.prayushadhikari.com.np/api/quotescategories=wisdom,motivation&match_categories=all');
-        if (!res.ok) throw new Error ('Quote could not load');
-        const { data } = await res.json();
-        return data[0];
-    } catch (error) {
-        console.error('Quote could not load:', error);
-        return null;
-    }
-}
+/** Written by Zoie D, 5/30/26 */
+
+export const fetchQuote = async (category, limit = 1) => {
+  const params = new URLSearchParams({ category, limit });
+  const res = await fetch(`https://quotesapi.prayushadhikari.com.np/api/quotes?${params}`);
+  const { data, meta } = await res.json();
+  return { quotes: data, total: meta.total };
+};

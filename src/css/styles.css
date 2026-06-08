@@ -11,9 +11,19 @@ body {
     color: red;
 }
 
-.container {
+#container.easy-mode {
     width: 400px;
-    margin: auto;
+    margin: 12px auto;
+}
+
+#container.mid-mode {
+    width: 700px;
+    margin: 12px auto;
+}
+
+#container.expert-mode {
+    width: 1230px;
+    margin: 12px auto;
 }
 
 .score-board {
@@ -89,8 +99,8 @@ body {
 
 #play-grid div.disabled {
     background-color: #aac1c1;
-    width: 38px;
-    height: 38px;
+    width: 38.5px;
+    height: 38.5px;
     border: 1px solid #637474;
     border-bottom: none;
     border-right: none;
@@ -126,6 +136,18 @@ body {
 
 button:active, button#reset:active, #play-grid div:active {
     border-color: #637474 #cfe1e2 #f3fbfc #748585;
+}
+
+#play-grid div.value-1,
+#play-grid div.value-2,
+#play-grid div.value-3,
+#play-grid div.value-4,
+#play-grid div.value-5,
+#play-grid div.value-6,
+#play-grid div.value-7,
+#play-grid div.value-8 {
+    background-color: #c1dbdc;
+    border-color: #dfebed #748585 #637474 #b1cecf;
 }
 
 #play-grid div.value-1 { color: #4cacd0; }

@@ -1,14 +1,27 @@
-import { MSLogic } from "./Logic";
+/** Written by Zoie D, 5/30/26 */
+import { html, render } from 'lit-html';
+
+import { MSLogic } from "./Logic.js";
+import { fetchQuote } from "./QuotesApi.js";
+import { GAME_MODES } from './GameMode.js';
+import { HighScores } from './HighScores.js';
 
 /* -UI + I/O- */
 export class MSIO {
     constructor(logic) {
         this.logic = logic;
 
+        this.quoteElement = document.getElementById('quote-container'); 
+
+        this.container = document.getElementById('container');
         this.grid = document.getElementById('play-grid');
         this.minesLeft = document.getElementById('mines-left');
         this.reset = document.getElementById('reset');
         this.timer = document.getElementById('timer');
+
+        this.easyBtn = document.getElementById('easy');
+        this.midBtn = document.getElementById('mid');
+        this.expertBtn = document.getElementById('expert');
     }
 
     createBoard(view, state) {
@@ -50,6 +63,7 @@ export class MSIO {
 
     restartGame(view, state) {
         clearInterval(state.timerInt);
+        this.timer.innerText = '000';
 
         const newState = new MSLogic({
             width: state.tiles[0].length,
@@ -60,6 +74,7 @@ export class MSIO {
         Object.assign(state, newState);
 
         this.initView(view, state);
+        this.quoteElement.innerHTML = '';
     }
 
     timerStart(view, state) {
@@ -87,24 +102,59 @@ export class MSIO {
         )
 
         this.grid.addEventListener('mousedown', (event) => {
-        if (state.isGameOver) {
+            if (state.isGameOver) {
+                return;
+            }
+
+            const tile = event.target;
+            if (tile.tagName !== 'DIV') {
+                return;
+            }
+            // test clicks | rm
+            console.log(tile);
+
+            this.timerStart(view, state);
+            if (event.button === 2) {
+                this.handleTileFlag(view, state, tile);
+            } else {
+                this.handleTilesReveal(view, state, tile);
+            }
+        });
+
+        this.easyBtn.addEventListener('click', 
+            () => this.handleGameMode('easy'));
+
+        this.midBtn.addEventListener('click', 
+            () => this.handleGameMode('mid'));
+
+        this.expertBtn.addEventListener('click', 
+            () => this.handleGameMode('expert'));
+    }
+
+    handleGameMode(mode) {
+        const settings = GAME_MODES[mode];
+        if (!settings) {
             return;
         }
 
-        const tile = event.target;
-        if (tile.tagName !== 'DIV') {
-            return;
-        }
-        // test clicks | rm
-        console.log(tile);
+        clearInterval(this.logic.state.timerInt);
 
-        this.timerStart(view, state);
-        if (event.button === 2) {
-            this.handleTileFlag(view, state, tile);
-        } else {
-            this.handleTilesReveal(view, state, tile);
-        }
-    });
+        const state = this.logic.state;
+        const newState = new MSLogic({
+            width: settings.width,
+            height: settings.height,
+            mineAmt: settings.mineAmt,
+        }).state;
+
+        Object.assign(state, newState);
+
+        this.grid.innerHTML = '';
+        this.createBoard(this, state);
+        this.initView(this, state);
+        this.timer.innerText = '000';
+
+        this.container.classList.remove('easy-mode', 'mid-mode', 'expert-mode');
+        this.container.classList.add(`${mode}-mode`);
     }
 
     handleTileFlag(view, state, tile) {
@@ -142,10 +192,25 @@ export class MSIO {
                 this.revealTiles(state, tile);
         }
 
-        if (state.tilesLeft === 0) {
+        if (state.tilesLeft === 0 || state.minesLeft === 0) {
             this.reset.className = 'won';
             this.gameOver(view, state);
         }
+    }
+
+    async loadQuote() {
+        const { quotes } = await fetchQuote();
+        const quote = quotes[0];
+
+        if (this.reset.className === 'lost') {
+            console.log(quote);
+        }
+        render(this.renderQuote(quote), this.quoteElement);
+    }
+
+    renderQuote(quote) {
+        return html`
+        <p>${quote.quote}</p>`;
     }
 
     revealTiles(state, tile) {
@@ -176,9 +241,11 @@ export class MSIO {
         }
         return true;
     }
+    
     gameOver(view, state) {
         clearInterval(state.timerInt);
         state.isGameOver = true;
+        this.loadQuote();
 
         for (const tile of this.grid.children) {
             const { x, y } = this.getTilePosition(tile);
