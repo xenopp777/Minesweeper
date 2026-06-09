@@ -2,23 +2,25 @@ export class HighScores {
     getScores() {
         return JSON.parse(
             localStorage.getItem('scores')
-        ) ||  {
-            easy: [],
-            mid: [],
-            expert: []
+        ) || {
+            easy: null,
+            mid: null,
+            expert: null
         };
     }
 
-    saveScore(mode, seconds) {
+    saveScore(mode, time) {
         const scores = this.getScores();
 
-        scores[mode].push(seconds);
-        scores[mode].sort((a, b) => a - b);
-        scores[mode] = scores[mode].slice(0, 5);
+        if (scores[mode] === null || time < scores[mode]) {
+            scores[mode] = time;
+            localStorage.setItem(
+                'scores',
+                JSON.stringify(scores)
+            );
+            return true;
+        }
 
-        localStorage.setItem(
-            'scores',
-            JSON.stringify(scores)
-        );
+        return false;
     }
 }

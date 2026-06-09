@@ -8,7 +8,7 @@ export class MSLogic {
         this.state = this.initGameState(config);
     }
 
-    initGameState( { width, height, mineAmt } ) {
+    initGameState( { width, height, mineAmt, mode = 'easy' } ) {
         const state = {
             mineAmt,
             minesLeft: mineAmt,
@@ -19,6 +19,7 @@ export class MSLogic {
             ),
             startTimer: undefined,
             timerInt: undefined, // interval
+            mode,
         };
 
         this.insertMines(state, mineAmt);

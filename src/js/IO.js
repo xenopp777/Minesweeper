@@ -10,6 +10,7 @@ import { HighScores } from './HighScores.js';
 export class MSIO {
     constructor(logic) {
         this.logic = logic;
+        this.highScores = new HighScores();
 
         this.quoteElement = document.getElementById('quote-container'); 
 
@@ -22,6 +23,12 @@ export class MSIO {
         this.easyBtn = document.getElementById('easy');
         this.midBtn = document.getElementById('mid');
         this.expertBtn = document.getElementById('expert');
+
+        this.easyScore = document.getElementById('easy-score');
+        this.midScore = document.getElementById('mid-score');
+        this.expertScore = document.getElementById('expert-score');
+
+        this.renderHighScores();
     }
 
     createBoard(view, state) {
@@ -69,6 +76,7 @@ export class MSIO {
             width: state.tiles[0].length,
             height: state.tiles.length,
             mineAmt: state.mineAmt,
+            mode: state.mode,
         }).state;
 
         Object.assign(state, newState);
@@ -129,6 +137,16 @@ export class MSIO {
 
         this.expertBtn.addEventListener('click', 
             () => this.handleGameMode('expert'));
+
+        this.renderHighScores();
+    }
+
+    renderHighScores() {
+        const scores = this.highScores.getScores();
+
+        this.easyScore.textContent = scores.easy ?? '--';
+        this.midScore.textContent = scores.mid ?? '--';
+        this.expertScore.textContent = scores.expert ?? '--';
     }
 
     handleGameMode(mode) {
@@ -144,6 +162,7 @@ export class MSIO {
             width: settings.width,
             height: settings.height,
             mineAmt: settings.mineAmt,
+            mode,
         }).state;
 
         Object.assign(state, newState);
@@ -193,6 +212,11 @@ export class MSIO {
         }
 
         if (state.tilesLeft === 0 || state.minesLeft === 0) {
+            const elapsedSeconds = Math.floor(
+                (new Date() - state.startTimer) / 1000
+            );
+            this.highScores.saveScore(state.mode, elapsedSeconds);
+            this.renderHighScores();
             this.reset.className = 'won';
             this.gameOver(view, state);
         }
