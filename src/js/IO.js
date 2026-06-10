@@ -82,7 +82,7 @@ export class MSIO {
         Object.assign(state, newState);
 
         this.initView(view, state);
-        this.quoteElement.html = '';
+        this.removeQuote();
     }
 
     timerStart(view, state) {
@@ -235,6 +235,10 @@ export class MSIO {
     renderQuote(quote) {
         return html`
         <p>${quote.quote}</p>`;
+    }
+
+    removeQuote() {
+        render(html``, this.quoteElement);
     }
 
     revealTiles(state, tile) {
