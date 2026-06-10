@@ -82,7 +82,7 @@ export class MSIO {
         Object.assign(state, newState);
 
         this.initView(view, state);
-        this.quoteElement.innerHTML = '';
+        this.quoteElement.html = '';
     }
 
     timerStart(view, state) {
